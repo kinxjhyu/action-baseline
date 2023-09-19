@@ -38363,9 +38363,6 @@ async function run() {
         let plugins = [];
         if (rulesFileLocation) {
             plugins = await common.helper.processLineByLine(`${workspace}/${rulesFileLocation}`);
-
-	    // Debug
-	    await exec.exec(`cat ${workspace}/${rulesFileLocation}`);
         }
 
         // Create the files so we can change the perms and allow the docker non root user to update them
@@ -38377,7 +38374,7 @@ async function run() {
             //`-t ${docker_name} zap-baseline.py -t ${target} -J ${jsonReportName} -w ${mdReportName}  -r ${htmlReportName} ${cmdOptions}`);
 
         let command = (`docker run -v /etc/hosts:/etc/hosts -v ${workspace}:/zap/wrk/:rw --network="host" --user root ` +
-            `-t ${docker_name} zap-baseline.py -t ${target} -J ${jsonReportName} -w ${mdReportName}  -r ${htmlReportName} ${cmdOptions}`);
+            `-t ${docker_name} zap-baseline.py -t ${target} -J ${jsonReportName} -w ${mdReportName}  -r ${htmlReportName} ${cmdOptions} -c ${rulesFileLocation}`);
 
         if (plugins.length !== 0) {
             command = command + ` -c ${rulesFileLocation}`
